@@ -17,21 +17,44 @@ app.get('/api/v1/person', (req, res) => {
 
 app.get('/api/v1/person/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
+    if (!person) res.status(404).send("The person with the provided ID does not exist");
     res.send(person);
 });
-app.post('/api/v1/person/:id', (req, res) => {
-    const person = persons.find(p => p.id === parseInt(req.params.id));
+app.post('/api/v1/person', (req, res) => {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1;
+    let yyyy = today.getFullYear();
+    if(dd<10)
+    {
+        dd='0'+dd;
+    }
+    if(mm<10)
+    {
+        mm='0'+mm;
+    }
+    today = yyyy+'-'+mm+'-'+dd;
+    console.log(today);
+    const person = {
+        id: persons.length + 1,
+        name: req.body.name,
+        age: req.body.age,
+        date_joined: req.body.date_joined,
+        date_updated: today
+    }
+    persons.push(person);
     res.send(person);
 });
 app.put('/api/v1/person/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
+    if (!person) res.status(404).send("The person with the provided ID could not be updated as it does not exist");
     res.send(person);
 });
 app.delete('/api/v1/person/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
+    if (!person) res.status(404).send("The person with the provided ID does not exist and could not delete");
     res.send(person);
 });
-
 
 const port  = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}....`));
