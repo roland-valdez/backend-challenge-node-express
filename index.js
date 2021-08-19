@@ -60,12 +60,8 @@ app.post('/api/v1/person', (req, res) => {
 
 app.put('/api/v1/person/update/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
-    let index;
-    for(let i = 0; i < persons.length; i += 1) {
-        if(persons[i].id == req.params.id) {
-           index = i;
-        }
-    }
+    let index = persons.indexOf(person);
+
     if (!person) res.status(404).send("The person with the provided ID could not be found");
     if(!(req.body.name == undefined)){
         person.name = req.body.name;
