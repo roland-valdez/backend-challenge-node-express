@@ -22,6 +22,7 @@ app.get('/api/v1/person/:id', (req, res) => {
     if (!person) res.status(404).send("The person with the provided ID does not exist");
     res.send(person);
 });
+
 app.post('/api/v1/person', (req, res) => {
     let today = new Date();
     let dd = today.getDate();
@@ -56,11 +57,24 @@ app.post('/api/v1/person', (req, res) => {
     persons.push(person);
     res.send(person);
 });
+
 app.put('/api/v1/person/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
-    if (!person) res.status(404).send("The person with the provided ID could not be updated as it does not exist");
+    if (!person) res.status(404).send("The person with the provided ID could not be found");
+    if(req.params.name){
+        person.name = req.params.name;
+    }
+    if(req.params.age){
+        person.age = req.params.age;
+    }
+    if(req.params.date_joined){
+        person.date_joined = req.params.date_joined;
+    }
+    let today = new Date();
+   person.date_updated = today;
     res.send(person);
 });
+
 app.delete('/api/v1/person/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
     if (!person) res.status(404).send("The person with the provided ID does not exist and could not delete");
