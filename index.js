@@ -90,9 +90,12 @@ app.put('/api/v1/person/update/:id', (req, res) => {
     res.send(person);
 });
 
-app.delete('/api/v1/person/:id', (req, res) => {
+app.delete('/api/v1/person/delete/:id', (req, res) => {
     const person = persons.find(p => p.id === parseInt(req.params.id));
     if (!person) res.status(404).send("The person with the provided ID does not exist and could not delete");
+    const index = persons.indexOf(person);
+    persons.splice(index,1)
+    console.log(persons);
     res.send(person);
 });
 
