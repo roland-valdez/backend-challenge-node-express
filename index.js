@@ -1,5 +1,7 @@
+const Joi = require('joi');
 const express = require('express');
 const app = express();
+
 
 app.use(express.json());
 
@@ -35,6 +37,14 @@ app.post('/api/v1/person', (req, res) => {
     }
     today = yyyy+'-'+mm+'-'+dd;
     console.log(today);
+    const schema = Joi.object({
+        name: Joi.string().max(2).required()
+    });
+    const result = schema.validate();
+    if(result.error){
+        res.status(400).send(result.error);
+        return;
+    }
     const person = {
         id: persons.length + 1,
         name: req.body.name,
