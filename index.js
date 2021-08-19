@@ -36,13 +36,14 @@ app.post('/api/v1/person', (req, res) => {
         mm='0'+mm;
     }
     today = yyyy+'-'+mm+'-'+dd;
-    console.log(today);
     const schema = Joi.object({
-        name: Joi.string().max(2).required()
+        name: Joi.string(),
+        age: Joi.string(),
+        date_joined: Joi.string()
     });
-    const result = schema.validate();
+    const result = schema.validate(req.body);
     if(result.error){
-        res.status(400).send(result.error);
+        res.status(400).send(result.error.message);
         return;
     }
     const person = {
